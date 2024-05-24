@@ -94,3 +94,39 @@ export default function App() {
 }
 ````
 
+### 获取URL中的参数实现数据的动态加载, 也是通过 Loader 进行
+- 如果url中传递了参数，比如 :contactId， 则通过如下的代码
+```` typescript
+// app/contacts.$contactId.tsx 文件
+import { json } from "@remix-run/node";
+import { Form, useLoaderData } from "@remix-run/react"; // 通过 useLoaderData
+
+import { getContact } from "../data"; // DAO导入
+
+export const loader = async ({ params }) => {
+  const contact = await getContact(params.contactId); // 这里就获取到了传来的contactId的值, 然后通过DAO的方法加载了数据
+  return json({ contact });
+};
+
+export default function Contact() {
+  const { contact } = useLoaderData<typeof loader>(); // 注入到页面中即可使用了
+
+  // ...
+}
+````
+
+- 传递的参数的验证与异常处理
+```` typescript
+
+import type { LoaderFunctionArgs } from "@remix-run/node";
+import invariant from "tiny-invariant";
+
+export const loader = async ({
+  params,
+}: LoaderFunctionArgs) => {
+  invariant(params.contactId, "Missing contactId param"); // 检查是否有contactId，如果没有，抛出错误消息
+  const contact = await getContact(params.contactId);
+  return json({ contact });
+};
+
+````
