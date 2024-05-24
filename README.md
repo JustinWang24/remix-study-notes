@@ -61,7 +61,7 @@ Make sure to deploy the output of `remix build`
 - 因此在 roots.tsx 文件中，通过 `loader` + `useLoaderData` 这两个模块，实现数据的加载
 - 真正的数据加载，比如从数据库，或者调用某个远端服务API，是通过 `app/data.ts` 来具体实现的，可以理解它是DAO，提供了真正的对数据源的CRUD功能
 - 在 root.tsx 文件中, 通过导入DAO (本例为 import data.ts 暴露的某些方法)， 并通过 loader 实现了数据加载
-````
+```` typescript
 import { json } from "@remix-run/node";  // 使用node原生的 json 库
 import { useLoaderData, } from "@remix-run/react"; 
 import { getContacts } from "./data"; // 引入DAO提供的获取contacts数据集合的 getContacts 接口
